@@ -29,6 +29,7 @@ class ClickHouseConfig(AdapterConfig):
     engine: str = 'MergeTree()'
     order_by: Optional[Union[List[str], str]] = 'tuple()'
     partition_by: Optional[Union[List[str], str]] = None
+    projections: Optional[Union[List[str], str]] = None
 
 
 class ClickHouseAdapter(SQLAdapter):

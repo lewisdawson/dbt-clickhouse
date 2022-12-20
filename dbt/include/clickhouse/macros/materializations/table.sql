@@ -98,6 +98,20 @@
   {%- endif %}
 {%- endmacro -%}
 
+{% macro projections_clause(label) %}
+    {%- set projections = config.get('projections', validator=validation.any[list, basestring]) -%}
+
+    {%- if projections is not none %}
+      {%- if projections is string -%}
+        {%- set projections = [projections] -%}
+      {%- endif -%}
+      {%- for projection in projections -%}
+        , {{ label }} {{projection}}
+        {%- if not loop.last -%},{%- endif -%}
+      {%- endfor -%}
+    {%- endif %}
+{%- endmacro -%}
+
 {% macro order_cols(label) %}
   {%- set cols = config.get('order_by', validator=validation.any[list, basestring]) -%}
   {%- set engine = config.get('engine', validator=validation.any[basestring]) -%}
@@ -119,6 +133,7 @@
         {{ item }}
         {%- if not loop.last -%},{%- endif -%}
       {%- endfor -%}
+      {{ projections_clause(label="projection") }}
       )
     {%- else %}
       {{ label }} (tuple())
